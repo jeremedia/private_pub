@@ -17,6 +17,12 @@ module PrivatePub
 
     # Ensure the subscription signature is correct and that it has not expired.
     def authenticate_subscribe(message)
+      puts ""
+      puts "authenticate_subscribe"
+      puts message
+      puts message.keys
+      puts message["ext"]
+      
       subscription = PrivatePub.subscription(:channel => message["subscription"], :timestamp => message["ext"]["private_pub_timestamp"])
       if message["ext"]["private_pub_signature"] != subscription[:signature]
         message["error"] = "Incorrect signature."
@@ -27,6 +33,12 @@ module PrivatePub
 
     # Ensures the secret token is correct before publishing.
     def authenticate_publish(message)
+      puts ""
+      
+      puts "authenticate_publish"
+      puts message
+      puts message.keys
+      puts message["ext"]
       if PrivatePub.config[:secret_token].nil?
         raise Error, "No secret_token config set, ensure private_pub.yml is loaded properly."
       elsif message["ext"]["private_pub_token"] != PrivatePub.config[:secret_token]
